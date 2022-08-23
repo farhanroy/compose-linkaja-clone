@@ -1,12 +1,15 @@
 package com.example.linkaja.ui.screens
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -211,20 +214,29 @@ fun AddMethod() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeBody() {
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        Row(horizontalArrangement = Arrangement.SpaceBetween) {
-            MenuItem(id = R.drawable.pulsadata, title = "Pulsa/Data")
-            MenuItem(id = R.drawable.electricity, title = "Electricity")
-            MenuItem(id = R.drawable.emoney, title = "E-Money")
-            MenuItem(id = R.drawable.games, title = "Games")
-        }
-        Row() {
-            MenuItem(id = R.drawable.transport, title = "Transportasi")
-            MenuItem(id = R.drawable.berbagi, title = "Berbagi")
-            MenuItem(id = R.drawable.pdam, title = "Air")
-            MenuItem(id = R.drawable.more, title = "Semua")
+    val list = listOf<ItemMenu>(
+        ItemMenu(id = R.drawable.pulsadata, title = "Pulsa/Data"),
+        ItemMenu(id = R.drawable.electricity, title = "Electricity"),
+        ItemMenu(id = R.drawable.emoney, title = "E-Money"),
+        ItemMenu(id = R.drawable.games, title = "Games"),
+        ItemMenu(id = R.drawable.transport, title = "Transportasi"),
+        ItemMenu(id = R.drawable.berbagi, title = "Berbagi"),
+        ItemMenu(id = R.drawable.pdam, title = "Air"),
+        ItemMenu(id = R.drawable.more, title = "Semua")
+    )
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)) {
+
+        LazyVerticalGrid(
+            cells = GridCells.Fixed(4)
+        ){
+            items(list.size) { index ->
+                MenuItem(id = list[index].id, list[index].title)
+            }
         }
     }
 }
@@ -232,7 +244,13 @@ fun HomeBody() {
 @Composable
 fun MenuItem(@DrawableRes id: Int, title: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, ) {
-        Image(painter = painterResource(id = id), contentDescription = null)
-        Text(title, fontWeight = FontWeight.Light, fontSize = 11.sp)
+        Image(painter = painterResource(id = id), contentDescription = null, modifier = Modifier.padding(top = 16.dp).size(48.dp))
+        Text(title, fontWeight = FontWeight.Normal, fontSize = 12.sp, modifier = Modifier.padding(top = 12.dp))
     }
 }
+
+data class ItemMenu(
+    @DrawableRes
+    val id: Int,
+    val title: String
+)
